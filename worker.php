@@ -23,7 +23,7 @@ $application = new \Phalcon\Mvc\Application($di);
 
 while ($req = $psr7->acceptRequest()) {
     $uriObject=$req->getUri();
-    //私有属性只能通过Closure方式获取
+    //To get private attributes, have to use closure.
     $getPathClosure = function () {
         return $this->path;
     };
@@ -38,11 +38,10 @@ while ($req = $psr7->acceptRequest()) {
     }
     try {
         $resp   = new \Zend\Diactoros\Response();
-        $content=$application->handle()->getContent();
-        //程序最后要刷出日志
-        $application->logger->flush();
-        $resp->getBody()->write($content);
 
+        $content=$application->handle()->getContent();
+
+        $resp->getBody()->write($content);
         $psr7->respond($resp);
     } catch (\Throwable $e) {
         // Executed only in PHP 7, will not match in PHP 5.x
