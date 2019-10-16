@@ -1,13 +1,17 @@
 # phalcon framework for roadrunner adapter
 
-## roadrunner env
-####   [documents](https://github.com/spiral/roadrunner)
+## Install
+```
+composer install
+./vendor/bin/rr get
+```
 
-#### start
+
+#### Run
 ```shell
 
 ./rr serve -v -d
 
 ```
-#### config 
+#### More config 
 * https://roadrunner.dev/docs/intro-config

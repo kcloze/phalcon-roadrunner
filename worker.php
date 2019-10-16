@@ -8,16 +8,32 @@
  */
 
 ini_set('display_errors', 'stderr');
+define('APP_PATH', __DIR__);
 
-require_once APP_PATH . '/vendor/autoload.php';
+require_once  'vendor/autoload.php';
 
 
 
 $relay = new Spiral\Goridge\StreamRelay(STDIN, STDOUT);
 $psr7  = new Spiral\RoadRunner\PSR7Client(new Spiral\RoadRunner\Worker($relay));
 
-$dumper = new Spiral\Debug\Dumper();
-$dumper->setRenderer(Spiral\Debug\Dumper::ERROR_LOG, new Spiral\Debug\Renderer\ConsoleRenderer());
+// $dumper = new Spiral\Debug\Dumper();
+// $dumper->setRenderer(Spiral\Debug\Dumper::ERROR_LOG, new Spiral\Debug\Renderer\ConsoleRenderer());
+
+/**
+ * Read the configuration
+ */
+$config = include APP_PATH . "/app/config/config.php";
+
+/**
+ * Read auto-loader
+ */
+include APP_PATH . "/app/config/loader.php";
+
+/**
+ * Read services
+ */
+include APP_PATH . "/app/config/main.php";
 
 $application = new \Phalcon\Mvc\Application($di);
 
@@ -28,7 +44,7 @@ while ($req = $psr7->acceptRequest()) {
         return $this->path;
     };
     $uri=$getPathClosure->call($uriObject);
-    $dumper->dump('uri: ' . $uri, Spiral\Debug\Dumper::ERROR_LOG);
+    // $dumper->dump('uri: ' . $uri, Spiral\Debug\Dumper::ERROR_LOG);
     $_GET['_url']=$uri;
     //set $_GET $_POST $_REQUEST
     foreach ($req->getQueryParams() as $key => $value) {
